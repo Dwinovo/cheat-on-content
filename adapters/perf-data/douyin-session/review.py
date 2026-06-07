@@ -100,14 +100,13 @@ async def run_with_id(aweme_id: str, script_path: str | None) -> None:
     print(f"[抓取] 视频 {aweme_id}")
     result = await crawler.fetch_all(aweme_id)
     video = result["video"]
-    detail = result["detail"]
     comments = result["comments"]
 
     out_dir = renderer.output_dir_for(video, active_videos_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     if script:
         (out_dir / "script.txt").write_text(script, encoding="utf-8")
-    md = renderer.render_report(video, script, comments, detail.get("captured"))
+    md = renderer.render_report(video, script, comments)
     report = out_dir / "report.md"
     report.write_text(md, encoding="utf-8")
     print(f"\n✓ {report}")
